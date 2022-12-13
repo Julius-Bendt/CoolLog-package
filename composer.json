@@ -1,0 +1,42 @@
+{
+    "name": "bendt/coollog",
+    "description": "Cool Log",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Julius Bendt",
+            "email": "julius@juto.dk"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Bendt\\CoolLog\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Bendt\\CoolLog\\Tests\\": "tests"
+        }
+    },
+    "require": {
+        "php": "^8.0",
+        "owen-it/laravel-auditing": "^12.0",
+        "monolog/monolog": "^2.0",
+        "webmozart/assert": "^1.11"
+    },
+    "require-dev": {
+        "laravel/laravel": "^8.0",
+        "guzzlehttp/guzzle": "^7.3",
+        "phpunit/phpunit": "^9.5",
+        "orchestra/testbench": "6.21.1",
+        "itsgoingd/clockwork": "^5.1"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Bendt\\CoolLog\\Providers\\CoolLogServiceProvider"
+            ]
+        }
+    }
+}
