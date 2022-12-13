@@ -67,7 +67,7 @@ class CoolLogger
 
 
         $searchable_data = [
-            "seq" => $this->sequence,
+            "sequence" => $this->sequence,
             "level" => $record["level_name"],
             "message" => $record["message"],
             "user" => auth()->id() ?: null,
