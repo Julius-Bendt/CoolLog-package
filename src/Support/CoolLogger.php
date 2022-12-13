@@ -62,8 +62,7 @@ class CoolLogger
         try {
             $stacktrace_path = $this->generateS3Link($exception_data, $config);
         } catch (Exception $exception) {
-            //TODO Slack logger
-            throw $exception;
+            //TODO Slack logger, handle exception
         }
 
 
