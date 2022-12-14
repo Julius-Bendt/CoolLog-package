@@ -25,9 +25,9 @@ class CoolLogger
         $this->sequence = uniqid("seq", true);
 
         $logger = new Logger("coolLog");
-        $handler = new CoolLoggerHandler(Logger::DEBUG, $config);
+        $cool_logger_handler = new CoolLoggerHandler(Logger::DEBUG, $config);
         $bufferHandler = new FingersCrossedHandler(
-            $handler,
+            $cool_logger_handler,
             Logger::ERROR,
             0,
             true,
@@ -69,13 +69,18 @@ class CoolLogger
         $searchable_data = [
             "sequence" => $this->sequence,
             "level" => $record["level_name"],
-            "message" => $record["message"],
             "user" => auth()->id() ?: null,
             "user_agent" => $this->request->server("HTTP_USER_AGENT"),
             "url" => $this->request->getUri(),
             "origin" => $this->request->headers->get("origin"),
             "app_name" => config("app.name"),
             "stacktrace_path" => $stacktrace_path,
+
+            "message" => $record["message"],
+            "file" => $exception_data["file"],
+            "file_line" => $exception_data["line"],
+            "exception_class" => $exception_data["type"],
+            "status_code" => $exception_data["code"],
         ];
 
         $record["extra"] = array_merge($record["extra"] ?? [],
