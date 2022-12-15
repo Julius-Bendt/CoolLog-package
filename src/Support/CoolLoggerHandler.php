@@ -8,6 +8,8 @@ use Monolog\Logger;
 
 class CoolLoggerHandler extends AbstractProcessingHandler
 {
+    private const DATABASE_TABLE = "service_exceptions";
+
     protected array $logger_config = [];
 
     public function __construct($level = Logger::DEBUG, array $logger_config = [])
@@ -35,7 +37,7 @@ class CoolLoggerHandler extends AbstractProcessingHandler
 
         try {
             DB::connection($this->logger_config["database"])
-                ->table("exception_queues")
+                ->table(self::DATABASE_TABLE)
                 ->insert($batch);
         } catch (\Exception $e) {
             // Slack log
