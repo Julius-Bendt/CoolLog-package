@@ -101,7 +101,7 @@ class CoolLogger
 
         // Merge the above data, into the stacktrace array, thus creating the full picture of the stacktrace
         $stacktrace = array_merge(
-            $exception_data,
+            [$exception_data],
             collect($exception->getTrace())->map(function ($trace) {
                 return Arr::except($trace, ["args"]);
             })->all()
