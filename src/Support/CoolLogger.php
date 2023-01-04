@@ -96,24 +96,15 @@ class CoolLogger
             return [];
         }
 
-        // In order to get where the exception was thrown
-        $exception_data = debug_backtrace(!DEBUG_BACKTRACE_PROVIDE_OBJECT | DEBUG_BACKTRACE_IGNORE_ARGS, 2)[0];
-
-        // Merge the above data, into the stacktrace array, thus creating the full picture of the stacktrace
-        $stacktrace = array_merge(
-            [$exception_data],
-            collect($exception->getTrace())->map(function ($trace) {
-                return Arr::except($trace, ["args"]);
-            })->all()
-        );
-
         return [
             "message" => $exception->getMessage(),
             "type" => get_class($exception),
             "code" => $exception->getCode(),
             "file" => $exception->getFile(),
             "line" => $exception->getLine(),
-            "stacktrace" => $stacktrace,
+            "stacktrace" => collect($exception->getTrace())->map(function ($trace) {
+                return Arr::except($trace, ["args"]);
+            })->all()
         ];
     }
 
