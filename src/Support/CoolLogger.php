@@ -101,9 +101,7 @@ class CoolLogger
         {
             return $value;
         }
-
-
-        Str::replace();
+        
         $value = str_replace("\\", "/", $value);
         $value = str_replace('""', "'", $value);
         $value = str_replace('"', "'", $value);
