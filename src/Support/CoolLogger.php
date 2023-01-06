@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Monolog\Handler\FingersCrossedHandler;
 use Monolog\Logger;
 use Throwable;
@@ -66,10 +67,12 @@ class CoolLogger
         }
 
 
+
+
         $searchable_data = [
             "sequence" => $this->sequence,
             "level" => $record["level_name"],
-            "user" => auth()->id() ?: null,
+            "user_id" => auth()->id() ?: null,
             "user_agent" => $this->request->server("HTTP_USER_AGENT"),
             "url" => $this->request->getUri(),
             "origin" => $this->request->headers->get("origin"),
@@ -83,11 +86,30 @@ class CoolLogger
             "status_code" => $exception_data["code"],
         ];
 
+        array_map(fn($value) => $this->cleanException($value), $searchable_data);
+
         $record["extra"] = array_merge($record["extra"] ?? [],
             $searchable_data,
         );
 
         return $record;
+    }
+
+    private function cleanException( mixed $value) :mixed
+    {
+        if(!is_string($value))
+        {
+            return $value;
+        }
+
+
+        Str::replace();
+        $value = str_replace("\\", "/", $value);
+        $value = str_replace('""', "'", $value);
+        $value = str_replace('"', "'", $value);
+        $value = trim($value);
+
+        return $value;
     }
 
     private function extractException(?Throwable $exception): array
@@ -104,7 +126,7 @@ class CoolLogger
             "line" => $exception->getLine(),
             "stacktrace" => collect($exception->getTrace())->map(function ($trace) {
                 return Arr::except($trace, ["args"]);
-            })->all()
+            })->all(),
         ];
     }
 
