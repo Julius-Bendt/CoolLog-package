@@ -40,7 +40,7 @@ class CoolLogger
 
         collect($logger->getHandlers())
             ->each(function (FingersCrossedHandler $handler) use ($config) {
-                $handler->pushProcessor(fn(array $record) => $this->processRecord($record, $config));
+                $handler->pushProcessor(fn (array $record) => $this->processRecord($record, $config));
             });
 
         return $logger;
@@ -80,28 +80,28 @@ class CoolLogger
             "stacktrace_path" => $stacktrace_path,
 
             "message" => $record["message"],
-            "file" => $exception_data["file"],
+            "file" => $exception_data["file"] ?? "-",
             "file_line" => $exception_data["line"],
             "exception_class" => $exception_data["type"],
             "status_code" => $exception_data["code"],
         ];
 
-        array_map(fn($value) => $this->cleanException($value), $searchable_data);
+        array_map(fn ($value) => $this->cleanException($value), $searchable_data);
 
-        $record["extra"] = array_merge($record["extra"] ?? [],
+        $record["extra"] = array_merge(
+            $record["extra"] ?? [],
             $searchable_data,
         );
 
         return $record;
     }
 
-    private function cleanException( mixed $value) :mixed
+    private function cleanException(mixed $value): mixed
     {
-        if(!is_string($value))
-        {
+        if (!is_string($value)) {
             return $value;
         }
-        
+
         $value = str_replace("\\", "/", $value);
         $value = str_replace('""', "'", $value);
         $value = str_replace('"', "'", $value);
